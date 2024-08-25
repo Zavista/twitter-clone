@@ -6,6 +6,9 @@ import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+
 type Data = {
   fullName: string;
   username: string;
@@ -13,6 +16,34 @@ type Data = {
 };
 
 const Sidebar = () => {
+  const {
+    mutate: logout,
+    isError,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/auth/logout`, {
+        method: "POST",
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (data.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Logout Successful");
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unknown error occurred.");
+      }
+    },
+  });
+
   const data: Data = {
     fullName: "John Doe",
     username: "johndoe",
@@ -72,7 +103,13 @@ const Sidebar = () => {
                 </p>
                 <p className="text-slate-500 text-sm">@{data?.username}</p>
               </div>
-              <BiLogOut className="w-5 h-5 cursor-pointer" />
+              <BiLogOut
+                className="w-5 h-5 cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  logout();
+                }}
+              />
             </div>
           </Link>
         )}
