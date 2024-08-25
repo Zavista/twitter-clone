@@ -9,24 +9,22 @@ import { BiLogOut } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-type Data =
-  | {
-      bio: string;
-      coverImg: string;
-      createdAt: string;
-      email: string;
-      followers: string[];
-      following: string[];
-      fullName: string;
-      likedPosts: string[];
-      link: string;
-      profileImg: string;
-      updatedAt: string;
-      username: string;
-      __v: number;
-      _id: string;
-    }
-  | Error;
+type Data = {
+  bio: string;
+  coverImg: string;
+  createdAt: string;
+  email: string;
+  followers: string[];
+  following: string[];
+  fullName: string;
+  likedPosts: string[];
+  link: string;
+  profileImg: string;
+  updatedAt: string;
+  username: string;
+  __v: number;
+  _id: string;
+};
 
 const Sidebar = () => {
   const queryClient = useQueryClient();
@@ -43,7 +41,6 @@ const Sidebar = () => {
       });
 
       const data = await res.json();
-      console.log(data);
       if (data.error) throw new Error(data.error);
       return data;
     },
@@ -60,8 +57,7 @@ const Sidebar = () => {
     },
   });
 
-  const { data }: Data = useQuery({ queryKey: ["authUser"] });
-  console.log(data);
+  const { data } = useQuery<Data>({ queryKey: ["authUser"] });
 
   return (
     <div className="md:flex-[2_2_0] w-18 max-w-52">
