@@ -6,16 +6,31 @@ import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-type Data = {
-  fullName: string;
-  username: string;
-  profileImg: string;
-};
+type Data =
+  | {
+      bio: string;
+      coverImg: string;
+      createdAt: string;
+      email: string;
+      followers: string[];
+      following: string[];
+      fullName: string;
+      likedPosts: string[];
+      link: string;
+      profileImg: string;
+      updatedAt: string;
+      username: string;
+      __v: number;
+      _id: string;
+    }
+  | Error;
 
 const Sidebar = () => {
+  const queryClient = useQueryClient();
+
   const {
     mutate: logout,
     isError,
@@ -34,6 +49,7 @@ const Sidebar = () => {
     },
     onSuccess: () => {
       toast.success("Logout Successful");
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: (error) => {
       if (error instanceof Error) {
@@ -44,11 +60,8 @@ const Sidebar = () => {
     },
   });
 
-  const data: Data = {
-    fullName: "John Doe",
-    username: "johndoe",
-    profileImg: "/avatars/boy1.png",
-  };
+  const { data }: Data = useQuery({ queryKey: ["authUser"] });
+  console.log(data);
 
   return (
     <div className="md:flex-[2_2_0] w-18 max-w-52">
