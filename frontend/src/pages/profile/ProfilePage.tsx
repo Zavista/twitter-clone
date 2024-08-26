@@ -13,6 +13,9 @@ import { MdEdit } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { formatMemberSinceDate } from "../../utils/db/date/date";
 
+import useFollow from "../../hooks/useFollow";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+
 type ImageRef = HTMLInputElement | null;
 type ImageProp = string | null;
 
@@ -69,6 +72,8 @@ const ProfilePage = () => {
     }
   };
 
+  const { follow, isPending } = useFollow();
+  const amIFollowing = authUser?.following.includes(user?._id);
   const isMyProfile = authUser._id === user?._id;
   const memberSinceDate = formatMemberSinceDate(user?.createdAt);
 
@@ -150,9 +155,11 @@ const ProfilePage = () => {
                 {!isMyProfile && (
                   <button
                     className="btn btn-outline rounded-full btn-sm"
-                    onClick={() => alert("Followed successfully")}
+                    onClick={() => follow(user?._id)}
                   >
-                    Follow
+                    {isPending && <LoadingSpinner size="sm"></LoadingSpinner>}
+                    {!isPending && amIFollowing && "Unfollow"}
+                    {!isPending && !amIFollowing && "Follow"}
                   </button>
                 )}
                 {(coverImg || profileImg) && (
