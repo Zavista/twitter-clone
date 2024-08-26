@@ -203,7 +203,11 @@ const ProfilePage = () => {
                 {(coverImg || profileImg) && (
                   <button
                     className="btn btn-primary rounded-full btn-sm text-white px-4 ml-2"
-                    onClick={() => updateProfile()}
+                    onClick={() => {
+                      updateProfile();
+                      setProfileImg(null);
+                      setCoverImg(null);
+                    }}
                   >
                     {isUpdatingProfile ? (
                       <LoadingSpinner size="sm"></LoadingSpinner>
