@@ -5,10 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 type PostsProps = {
-  feedType: string;
+  feedType?: string;
+  username?: string;
+  userId?: string;
 };
 
-const Posts = ({ feedType }: PostsProps) => {
+const Posts = ({ feedType, username, userId }: PostsProps) => {
   const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
@@ -23,6 +25,15 @@ const Posts = ({ feedType }: PostsProps) => {
             break;
           case "following":
             res = await fetch("/api/post/following");
+            data = await res.json();
+            break;
+          case "posts":
+            res = await fetch(`/api/post/user/${username}`);
+            data = await res.json();
+            break;
+
+          case "likes":
+            res = await fetch(`/api/post/likes/${userId}`);
             data = await res.json();
             break;
           default:
