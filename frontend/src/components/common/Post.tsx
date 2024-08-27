@@ -9,17 +9,18 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { Post as postType } from "../../utils/db/dummy";
 import LoadingSpinner from "./LoadingSpinner";
 import { formatPostDate } from "../../utils/db/date/date";
 
 type PostProps = {
-  post: postType;
+  post: any;
 };
 
 const Post = ({ post }: PostProps) => {
   const [comment, setComment] = useState("");
-  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  const { data: authUser }: { data: any } = useQuery({
+    queryKey: ["authUser"],
+  });
   const queryClient = useQueryClient();
   const postOwner = post.user;
   const isLiked = post.likes.includes(authUser._id);
@@ -69,7 +70,7 @@ const Post = ({ post }: PostProps) => {
       // queryClient.invalidateQueries({ queryKey: ["posts"] });
 
       // instead, update the cache directly for that post
-      queryClient.setQueryData(["posts"], (oldData) => {
+      queryClient.setQueryData(["posts"], (oldData: any) => {
         return oldData.map((p) => {
           if (p._id === post._id) {
             return { ...p, likes: updatedLikes };
@@ -179,11 +180,12 @@ const Post = ({ post }: PostProps) => {
           <div className="flex gap-4 items-center w-2/3 justify-between">
             <div
               className="flex gap-1 items-center cursor-pointer group"
-              onClick={() =>
-                document
-                  .getElementById("comments_modal" + post._id)
-                  ?.showModal()
-              }
+              onClick={() => {
+                const dialogElement = document.getElementById(
+                  "comments_modal" + post._id
+                ) as HTMLDialogElement;
+                dialogElement?.showModal();
+              }}
             >
               <FaRegComment className="w-4 h-4 text-slate-500 group-hover:text-sky-400" />
               <span className="text-sm text-slate-500 group-hover:text-sky-400">

@@ -37,7 +37,7 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const { mutate, isError, isPending, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async ({ email, username, fullName, password }: FormData) => {
       const res = await fetch(`/api/auth/signup`, {
         method: "POST",

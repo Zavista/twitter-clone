@@ -1,6 +1,6 @@
 export const formatPostDate = (createdAt) => {
-  const currentDate = new Date();
-  const createdAtDate = new Date(createdAt);
+  const currentDate: any = new Date();
+  const createdAtDate: any = new Date(createdAt);
 
   const timeDifferenceInSeconds = Math.floor(
     (currentDate - createdAtDate) / 1000

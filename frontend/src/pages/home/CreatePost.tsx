@@ -15,15 +15,10 @@ const CreatePost = () => {
 
   const imgRef = useRef<ImageRef>(null);
 
-  const { data } = useQuery({ queryKey: ["authUser"] });
+  const { data }: { data: any } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
 
-  const {
-    mutate: createPost,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
+  const { mutate: createPost, isPending } = useMutation({
     mutationFn: async ({ text, img }: { text: string; img: ImageURL }) => {
       try {
         const res = await fetch("/api/post/create", {
@@ -33,7 +28,7 @@ const CreatePost = () => {
           },
           body: JSON.stringify({ text, img }),
         });
-        const data = await res.json();
+        const data: any = await res.json();
         if (!res.ok) {
           throw new Error(data.error || "Something went wrong");
         }

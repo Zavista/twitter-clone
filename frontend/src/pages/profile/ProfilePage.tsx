@@ -31,18 +31,21 @@ const ProfilePage = () => {
 
   const { username } = useParams();
 
-  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  const { data: authUser }: { data: any } = useQuery({
+    queryKey: ["authUser"],
+  });
   const {
     data: user,
     isLoading,
     refetch,
     isRefetching,
+    error,
   } = useQuery({
     queryKey: ["userProfile"],
     queryFn: async () => {
       try {
         const res = await fetch(`/api/user/profile/${username}`);
-        const data = await res.json();
+        const data: any = await res.json();
         if (!res.ok) {
           throw new Error(data.error || "Something went wrong");
         }
@@ -67,6 +70,7 @@ const ProfilePage = () => {
           }),
         });
         const data = await res.json();
+        console.log(data);
         if (!res.ok) {
           throw new Error(data.error || "Something went wrong");
         }

@@ -31,7 +31,11 @@ const EditProfileModal = ({ authUser }: EditProfileModalProps) => {
 
   const queryClient = useQueryClient();
 
-  const { mutate: updateProfile, isPending: isUpdatingProfile } = useMutation({
+  const {
+    mutate: updateProfile,
+    isPending: isUpdatingProfile,
+    error,
+  } = useMutation({
     mutationFn: async () => {
       try {
         const res = await fetch("/api/user/update", {
@@ -86,15 +90,18 @@ const EditProfileModal = ({ authUser }: EditProfileModalProps) => {
         currentPassword: "",
       });
     }
-  });
+  }, [authUser]);
 
   return (
     <>
       <button
         className="btn btn-outline rounded-full btn-sm"
-        onClick={() =>
-          document.getElementById("edit_profile_modal")?.showModal()
-        }
+        onClick={() => {
+          const dialogElement = document.getElementById(
+            "edit_profile_modal"
+          ) as HTMLDialogElement;
+          dialogElement?.showModal();
+        }}
       >
         Edit profile
       </button>

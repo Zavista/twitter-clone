@@ -22,12 +22,7 @@ const LoginPage = () => {
 
   const queryClient = useQueryClient();
 
-  const {
-    mutate: login,
-    isError,
-    isPending,
-    error,
-  } = useMutation({
+  const { mutate: login, isPending } = useMutation({
     mutationFn: async ({ username, password }: FormData) => {
       const res = await fetch(`/api/auth/login`, {
         method: "POST",

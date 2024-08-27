@@ -7,8 +7,10 @@ import dotenv from "dotenv";
 import connectMongoDB from "./db/connectMongoDB.js";
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
+import path from "path";
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 080;
+8;
 
 dotenv.config();
 cloudinary.config({
@@ -19,6 +21,8 @@ cloudinary.config({
 
 const app = express();
 
+const __dirname = path.resolve();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -27,6 +31,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/notification", notificationRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+}
 
 app.get("/", (req, res) => {
   res.send("Server is ready");

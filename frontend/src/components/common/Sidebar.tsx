@@ -29,12 +29,7 @@ type Data = {
 const Sidebar = () => {
   const queryClient = useQueryClient();
 
-  const {
-    mutate: logout,
-    isError,
-    isPending,
-    error,
-  } = useMutation({
+  const { mutate: logout } = useMutation({
     mutationFn: async () => {
       const res = await fetch(`/api/auth/logout`, {
         method: "POST",
