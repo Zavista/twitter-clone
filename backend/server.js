@@ -9,7 +9,7 @@ import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
 import path from "path";
 
-const PORT = process.env.PORT || 080;
+const PORT = process.env.PORT || 8080;
 8;
 
 dotenv.config();
